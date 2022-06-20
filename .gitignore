@@ -33,3 +33,5 @@ server/public/assets/**
 
 # Ignore master key for decrypting credentials and more.
 server/config/master.key
+server/config/credentials.yml.enc
+server/config/environments/production.rb
