@@ -177,7 +177,7 @@ float calibrateTemperature(float tempInput)
    * Two point calibration 
    * https://www.instructables.com/Calibration-of-DS18B20-Sensor-With-Arduino-UNO/
    */
-  float rawHigh = 99.44, rawLow = -0.6, referenceHigh = 99.79, referenceLow = -1;
+  float rawHigh = 99.44, rawLow = 36.69, referenceHigh = 99.79, referenceLow = 36.1;
   float rawRange = rawHigh-rawLow, referenceRange = referenceHigh - referenceLow;
   return (((tempInput-rawLow)*referenceRange)/rawRange)+referenceLow;
 }
@@ -275,14 +275,8 @@ String getRequest()
   json["aquarium_id"] = AQUARIUM_ID;
   json["sensor_id"] = SENSOR_ID;
   json["value"] = tempToJson;
-  json["dataCapture"] = getTimeNow();
 
   String request;
   serializeJson(json, request);
   return request;
-}
-
-String getTimeNow()
-{
-  return String("") + DATE + String("/") + MONTH + String("/") + YEAR + String("T") + String("") + HOUR + String(":") + MINUTE + String(":") + SECOND;
 }

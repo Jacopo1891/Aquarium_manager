@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_20_230844) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_23_155037) do
   create_table "aquaria", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -21,7 +21,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_20_230844) do
     t.integer "aquarium_id", null: false
     t.integer "sensor_id", null: false
     t.string "value"
-    t.date "dataCapture"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["aquarium_id"], name: "index_data_on_aquarium_id"
