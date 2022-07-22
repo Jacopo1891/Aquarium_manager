@@ -1,11 +1,12 @@
 class DataController < ApplicationController
   before_action :set_datum, only: %i[ show edit update destroy ]
 
-  # GET /data or /data.json
-  def index
-    @data = Datum.all
-  end
-
+   #GET /data or /data.json
+   def index
+     @data = Datum.filter(params.slice(:start_date, :end_date))
+       render json: @data, only: [:id, :aquarium_id, :sensor_id, :value, :created_at]
+   end
+   
   # GET /data/1 or /data/1.json
   def show
   end
@@ -25,8 +26,7 @@ class DataController < ApplicationController
 
     respond_to do |format|
       if @datum.save
-        format.html { redirect_to datum_url(@datum), notice: "Datum was successfully created." }
-        format.json { render :show, status: :created, location: @datum }
+        format.json { render status: 200, json: @controller.to_json }
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @datum.errors, status: :unprocessable_entity }
@@ -65,6 +65,6 @@ class DataController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def datum_params
-      params.require(:datum).permit(:aquarium_id, :sensor_id, :value, :dataCapture)
+      params.require(:datum).permit(:aquarium_id, :sensor_id, :value)
     end
 end

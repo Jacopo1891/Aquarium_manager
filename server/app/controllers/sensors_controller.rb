@@ -4,6 +4,8 @@ class SensorsController < ApplicationController
   # GET /sensors or /sensors.json
   def index
     @sensors = Sensor.all
+
+    render json: @sensors
   end
 
   # GET /sensors/1 or /sensors/1.json

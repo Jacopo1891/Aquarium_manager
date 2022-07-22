@@ -4,6 +4,8 @@ class AquariaController < ApplicationController
   # GET /aquaria or /aquaria.json
   def index
     @aquaria = Aquarium.all
+
+    render json: @aquaria
   end
 
   # GET /aquaria/1 or /aquaria/1.json
