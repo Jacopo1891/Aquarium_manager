@@ -1,1 +1,45 @@
-<p>Hello World</p>
+<div class="text-center">
+    <div class="py-4 px-12">
+        <p class="font-bold text-2xl text-center">Acquarium Manager</p>
+    </div>
+    
+    <div class="py-4 px-12 flex items-stretch text-center">
+        <div class="w-full">
+            <div class="font-bold text-xl text-center self-start">Temperature di oggi</div>
+        </div>
+    </div>
+        <div class="w-full flex justify-center ">
+           <table class="border-collapse border border-slate-400 w-2/3">
+            <tbody>
+                <tr>
+                <td class="border border-slate-300 ">Status</td>
+                <td class="border border-slate-300 "></td>
+                </tr>
+                <tr>
+                <td class="border border-slate-300 ">Media</td>
+                <td class="border border-slate-300 "><%=number_with_precision(Datum.today_data.filter_by_sensor(1).average(:value), precision: 2) %>°C</td>
+                </tr>
+                <tr>
+                <td class="border border-slate-300 ">Massima</td>
+                <td class="border border-slate-300 "><%=number_with_precision(Datum.today_data.filter_by_sensor(1).maximum(:value), precision: 2) %>°C</td>
+                </tr>
+                <tr>
+                <td class="border border-slate-300 ">Minima</td>
+                <td class="border border-slate-300 "><%=number_with_precision(Datum.today_data.filter_by_sensor(1).minimum(:value), precision: 2) %>°C</td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="py-4 px-12">
+        <%= line_chart Datum.two_days_data.filter_by_sensor(1).group_by_hour(:created_at, format: "%d %a %H:%M").average(:value),
+        title: "Temperature degli ultimi giorni",
+        min: 24.00,
+        max: 30.00,
+        stacked: true,
+        decimal: ",",
+        round: 2, zeros: true,
+        language: "it" %>
+    </div>
+</div>

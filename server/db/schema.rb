@@ -10,7 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_23_155037) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_24_133230) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "aquaria", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -18,9 +21,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_23_155037) do
   end
 
   create_table "data", force: :cascade do |t|
-    t.integer "aquarium_id", null: false
-    t.integer "sensor_id", null: false
-    t.string "value"
+    t.bigint "aquarium_id", null: false
+    t.bigint "sensor_id", null: false
+    t.decimal "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["aquarium_id"], name: "index_data_on_aquarium_id"

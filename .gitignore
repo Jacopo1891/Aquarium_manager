@@ -40,3 +40,4 @@ server/node_modules/*
 
 server/app/assets/builds/*
 server/bin/*
+.vscode/extensions.json

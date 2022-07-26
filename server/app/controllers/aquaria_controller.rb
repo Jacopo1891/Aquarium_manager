@@ -27,8 +27,7 @@ class AquariaController < ApplicationController
 
     respond_to do |format|
       if @aquarium.save
-        format.html { redirect_to aquarium_url(@aquarium), notice: "Aquarium was successfully created." }
-        format.json { render :show, status: :created, location: @aquarium }
+        format.json { render status: 200, json: @controller.to_json }
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @aquarium.errors, status: :unprocessable_entity }

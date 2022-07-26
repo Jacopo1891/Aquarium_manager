@@ -3,11 +3,9 @@
 one:
   aquarium: one
   sensor: one
-  value: MyString
-  dataCapture: 2022-06-12
+  value: 1.0
 
 two:
   aquarium: two
   sensor: two
-  value: MyString
-  dataCapture: 2022-06-12
+  value: 2.0

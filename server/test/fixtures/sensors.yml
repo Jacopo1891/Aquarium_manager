@@ -2,10 +2,10 @@
 
 one:
   name: MyString
-  guid: MyString
   unitOfMeasure: MyString
+  description: MyString
 
 two:
   name: MyString
-  guid: MyString
   unitOfMeasure: MyString
+  description: MyString
