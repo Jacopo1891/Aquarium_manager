@@ -11,6 +11,7 @@
 #include <ESP8266WiFiScan.h>
 #include <ESP8266WiFiSTA.h>
 #include <ESP8266WiFiType.h>
+#include <LiquidCrystal_I2C.h>
 #include <WiFiClient.h>
 #include <WiFiClientSecure.h>
 #include <WiFiClientSecureBearSSL.h>
@@ -19,7 +20,6 @@
 #include <WiFiServerSecureBearSSL.h>
 #include <WiFiUdp.h>
 #include <ESP8266WiFiMulti.h>
-#include <LiquidCrystal.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
 #include "ArduinoSecrets.h"
@@ -29,12 +29,7 @@
 #include <ESP8266WiFi.h>
 
 // LCD connection
-#define LCD_PIN_RS D2
-#define LCD_PIN_E D3
-#define LCD_PIN_D4 D5
-#define LCD_PIN_D5 D6
-#define LCD_PIN_D6 D7
-#define LCD_PIN_D7 D8
+#define LCD_ADDRESS 0x27
 
 #define BUTTON_PIN D0
 
@@ -47,7 +42,7 @@ String ipAddress = "Not connected";
 const char* serverName = SERVER_URL;
 
 // Arduino pin connected to DS18B20 sensor's DQ pin
-#define SENSOR_PIN D1
+#define SENSOR_PIN D3
 
 // NPT server and timezone
 #define NTP0 "europe.pool.ntp.org"
@@ -59,7 +54,7 @@ char strftime_buf[64];
 int GTMOffset = 1;
 
 ESP8266WiFiMulti wifiMulti;
-LiquidCrystal lcd(LCD_PIN_RS,LCD_PIN_E,LCD_PIN_D4,LCD_PIN_D5,LCD_PIN_D6,LCD_PIN_D7);;
+LiquidCrystal_I2C lcd(LCD_ADDRESS,16, 2);
 OneWire oneWire(SENSOR_PIN);
 DallasTemperature tempSensor(&oneWire);
 WiFiUDP ntpUDP;
@@ -69,9 +64,10 @@ NTPClient timeClient(ntpUDP, "0.it.pool.ntp.org", GTMOffset * 60 * 60, 60000);
 
 void setup()
 {
-  // LCD's number of columns and rows:
-  lcd.begin(16, 2);
-
+  lcd.init();
+  // turn on LCD backlight                      
+  lcd.backlight();
+  
   // initialize the sensor
   tempSensor.begin();
 
@@ -271,7 +267,6 @@ void uploadData()
 String getRequest()
 {
   String tempToJson = getTemperature();
-  tempToJson.replace(".", "");
   json["aquarium_id"] = AQUARIUM_ID;
   json["sensor_id"] = SENSOR_ID;
   json["value"] = tempToJson;
