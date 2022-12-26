@@ -23,3 +23,8 @@ The red key changes information on LCD showing device's ip.
 
 ### Alexa integration
 Taking advantage of NodeRed and the Alexa skill, it is possible to ask the assistant information about aquarium temperature.
+
+##### Example:
+>*"Alexa what is the temperature of the aquarium?"*
+>
+>*"The temperature of the aquarium is 25.06°"*
