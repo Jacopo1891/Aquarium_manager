@@ -1,9 +1,9 @@
 from functools import wraps
-import logging, requests, json
+import logging, requests, io
 from datetime import datetime
-from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
+from telegram import ReplyKeyboardMarkup, Update
 from telegram.ext import (Application, CommandHandler, ContextTypes, ConversationHandler, MessageHandler, filters)
-
+import matplotlib.pyplot as plt
 from config import *
 
 logging.basicConfig(
@@ -24,7 +24,7 @@ def restricted(func):
     @wraps(func)
     async def wrapped(update, context, *args, **kwargs):
         user_id = update.effective_user.id
-        if user_id not in allowedChats:
+        if user_id not in allowed_chats:
             logger.info(f"Unauthorize user try to use me! {update.effective_user}")
             await update.message.reply_text("I think <a href='https://en.wikiquote.org/wiki/Time'>this</a> is what you are looking for!", parse_mode='HTML', disable_web_page_preview=True,reply_markup=markup)
             return
@@ -46,8 +46,8 @@ async def media_giorno_choice(update: Update, context: ContextTypes.DEFAULT_TYPE
     return CHOOSING
 
 async def storico_24_h_choice(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    response = f"{get_storico_24_h()}"
-    await update.message.reply_text(f"{response}",reply_markup=markup)
+    image_buffer = get_storico_24_h()
+    await update.message.reply_photo(image_buffer,reply_markup=markup)
     return CHOOSING     
 
 async def random_choice(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
@@ -113,7 +113,33 @@ def get_media_giorno():
     return f"Temperatura media: {temperature}"
 
 def get_storico_24_h():
-    return "Work in progress..."
+    response = get_api_response("alexa/getHistory")
+    if response:
+        return get_graph(response)
+    return None
+
+def get_graph(response):
+    y_values = [float(entry["value"]) for entry in response]
+    x_values = [entry["created_at"] for entry in response]
+    plt.figure(figsize=(12, 6))
+    plt.axhline(y=25.5, color='gray', linestyle='--')
+    plt.axhline(y=26, color='gray', linestyle='--')
+    plt.axhline(y=26.5, color='gray', linestyle='--')
+    plt.axhline(y=27, color='red', linestyle='--')
+    plt.axhline(y=27.5, color='gray', linestyle='--')
+    plt.axhline(y=28, color='gray', linestyle='--')
+    plt.axhline(y=28.5, color='gray', linestyle='--')
+    plt.xlabel("Orario")
+    plt.ylabel("Temperatura")
+    plt.plot(x_values, y_values, marker='o')
+    plt.ylim(25, 29)
+    plt.xticks(range(0, len(x_values), 4), rotation=45)
+    plt.tight_layout()
+    buffer = io.BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    plt.close()
+    return buffer
 
 def main() -> None:
     if(bot_id == ""):
