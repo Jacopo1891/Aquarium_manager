@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   get 'alexa/getMaxTemperatureToday'
   get 'alexa/getMaxTemperatureToday'
   get 'alexa/getLastTemperature'
+  get 'alexa/getHistoryDay'
+  get 'alexa/getHistory'
   resources :data
   resources :aquaria
   resources :sensors
@@ -11,5 +13,5 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
-   root "home#index"
+  root "home#index"
 end

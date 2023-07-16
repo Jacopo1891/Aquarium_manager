@@ -42,3 +42,6 @@ server/app/assets/builds/*
 server/bin/*
 .vscode/extensions.json
 .vscode/c_cpp_properties.json
+
+# Ignore Telegram Bot files
+telegramBOT/__pycache__
