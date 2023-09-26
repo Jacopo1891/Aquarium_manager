@@ -5,6 +5,7 @@ from telegram import ReplyKeyboardMarkup, Update
 from telegram.ext import (Application, CommandHandler, ContextTypes, ConversationHandler, MessageHandler, filters)
 import matplotlib.pyplot as plt
 from config import *
+import numpy as np
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
@@ -119,20 +120,18 @@ def get_storico_24_h():
     return None
 
 def get_graph(response):
-    y_values = [float(entry["value"]) for entry in response]
-    x_values = [entry["created_at"] for entry in response]
+    filtered_response = [entry for entry in response if entry["value"] is not None]
+    y_values = [float(entry["value"]) for entry in filtered_response]
+    x_values = [entry["created_at"] for entry in filtered_response]
     plt.figure(figsize=(12, 6))
-    plt.axhline(y=25.5, color='gray', linestyle='--')
-    plt.axhline(y=26, color='gray', linestyle='--')
-    plt.axhline(y=26.5, color='gray', linestyle='--')
+    y_range = np.arange(24.5, 29.5, 0.5)
+    for y_value in y_range:
+        plt.axhline(y=y_value, color='gray', linestyle='--')
     plt.axhline(y=27, color='red', linestyle='--')
-    plt.axhline(y=27.5, color='gray', linestyle='--')
-    plt.axhline(y=28, color='gray', linestyle='--')
-    plt.axhline(y=28.5, color='gray', linestyle='--')
     plt.xlabel("Orario")
     plt.ylabel("Temperatura")
     plt.plot(x_values, y_values, marker='o')
-    plt.ylim(25, 29)
+    plt.ylim(24, 29)
     plt.xticks(range(0, len(x_values), 4), rotation=45)
     plt.tight_layout()
     buffer = io.BytesIO()
