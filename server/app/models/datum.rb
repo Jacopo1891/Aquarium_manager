@@ -4,6 +4,8 @@ class Datum < ApplicationRecord
   belongs_to :aquarium
   belongs_to :sensor
 
+  validates :value, presence: true
+
   scope :filter_by_sensor, -> (sensor_id) { where(sensor_id: sensor_id) }
 
   scope :week_data, -> { where("created_at >= ?", 1.week.ago.midnight) }
